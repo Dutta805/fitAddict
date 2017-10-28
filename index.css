@@ -1,0 +1,83 @@
+body{
+	background: #333;
+	color: white;
+}
+.navbar{
+	border-bottom: #008ed6 3px solid;
+	opacity: 0.8;
+}
+
+.navbar-brand{
+	width: 100px;
+	height: 50px;
+	background: #43f736;
+	text-align: center;
+	padding-top: 10px;
+	border-radius-top-left:5px;
+	border-radius-bottom-right:5px; 
+    font-family: fantasy;
+
+}
+
+#home-section{
+	background: url(https://static.pexels.com/photos/461428/pexels-photo-461428.jpeg) no-repeat center top fixed;
+    background-size: cover;
+    background-attachment: fixed;
+    min-height: 700px;
+
+ #fsize{
+
+ }
+
+
+    .home-inner{
+    	padding-top: 250px;
+    }
+
+    .card-form{
+    	opacity: 0.8;
+    }
+
+    .fa{
+    	color: #008ed6;
+    	background: #f47142;
+    	padding: 4px;
+    	border-radius: 5px;
+    	font-size: 30px;
+    }
+}
+
+.dark-overlay{
+        background-color: rgba(0,0,0,0.3);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        min-height: 700px;
+    }
+
+#fsize{
+    font-size: 20px;
+    color: #ffffff;
+}
+
+#explore-section
+{
+    font-size: 20px;
+}
+
+#card-section{
+    background: #2c4977;
+}
+
+.list
+{
+display: inline;
+margin-left: 30px;
+}
+
+@media(max-width:576px){
+nav .container{
+width:100%;
+}
+}
