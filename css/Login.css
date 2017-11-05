@@ -1,0 +1,19 @@
+#main-content
+{
+	background: url(https://static.pexels.com/photos/296649/pexels-photo-296649.jpeg);
+	background-attachment: fixed;
+	background-size: cover;
+}
+
+#card1{
+	background: #ff9f84;
+}
+#card2{
+	background: #a3dd96;
+}
+
+#footer{
+		background: #333;
+		color: white;
+		height: 85px;
+}
