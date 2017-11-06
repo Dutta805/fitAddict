@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <html>
 <head>
 <meta charset="UTF-8">
@@ -7,6 +11,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="icon" type="image/png" href="images/fitAddict.png">
 <link rel="stylesheet" type="text/css" href="css/consult.css">
 <title>fitAddict</title>
 </head>
@@ -16,7 +21,7 @@
 <button class="navbar-toggler navbar-toggler-right" data-toggle="collapse" data-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
 
 <div class="collapse navbar-collapse" id="navbarNav">
-<a href="#" class="navbar-brand text-muted"><b>fitAddict</b></a>
+<a href="#" class="navbar-brand text-muted"><img height="60px" width="60px" src="images/fitAddict.png" alt=""></a>
 	<ul class="navbar-nav ml-auto">
 	<li class="nav-item p-2">
 	<a class="nav-link" href="index.php">HOME</a>
@@ -28,10 +33,12 @@
 	<a class="nav-link" href="#blog-head-section">BLOG</a>
 	</li>
 	<li class="nav-item p-2">
-	<a class="nav-link" href="#as-head-section">ABOUT US</a>
+	<a class="nav-link" href="About.php">ABOUT US</a>
 	</li>
 	<li class="nav-item p-2">
-	<a class="nav-link" href="#as-head-section">LOGIN</a>
+	<a class="nav-link" href="Login.php">LOGIN</a>
+	</li>
+	<input class="btn btn-outline-success" type="button" name="btn" value="<?php echo $_SESSION["uname"]?>">
 	</li>
 	</ul>
 </div>
@@ -43,7 +50,7 @@
 <header id="main-header">
 	<div class="row no-gutters">
 		<div class="col-lg-4 col-md-5 col-sm-12">
-			<img src="images/header1.jpeg" alt="">
+			<img src="images/header1.jpg" alt="">
 		</div>
 		<div class="col-lg-8 col-md-7 col-sm-12">
 			<div class="d-flex flex-column">

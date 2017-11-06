@@ -1,3 +1,36 @@
+<?php
+session_start();
+
+
+$con = mysql_connect("localhost","root","root123");
+mysql_query("USE user");
+$a=("INSERT INTO fitusers (Name, Email, Age, Password) VALUES ('$_POST[username]', '$_POST[email]', '$_POST[dob]', '$_POST[password]')" );
+
+if(isset($_POST['submit']))
+{
+	$name = $_POST['username'];
+	$email = $_POST['email'];
+	$age = $_POST['dob'];
+	$pwd = $_POST['password'];
+	$cnfpwd = $_POST['cnfmpwd'];
+
+	if($pwd != $cnfpwd)
+	{
+
+		echo "<script>alert('password doesnt match'); </script>";
+		header('Location: index.php');
+	}
+	else{
+		echo "<script>alert('Congrats! $name you are now a fitAddict'); </script>";
+		mysql_query($a,$con);
+	}
+}
+mysql_close($con);
+?>
+
+
+
+
 <html>
 <head>
 <meta charset="UTF-8">
@@ -7,8 +40,14 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="icon" type="image/png" href="images/fitAddict.png">
 <link rel="stylesheet" type="text/css" href="css/index.css">
 <title>fitAddict</title>
+<style>
+	.error{
+		color: #FF0000;
+	}
+</style>
 </head>
 <body>
 <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
@@ -16,10 +55,10 @@
 <button class="navbar-toggler navbar-toggler-right" data-toggle="collapse" data-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
 
 <div class="collapse navbar-collapse" id="navbarNav">
-<a href="#" class="navbar-brand text-muted"><b>fitAddict</b></a>
+<a href="#" class="navbar-brand text-muted"><img height="60px" width="50px" src="images/fitAddict.png" alt=""></a>
 	<ul class="navbar-nav ml-auto">
 	<li class="nav-item p-2 active">
-	<a class="nav-link" href="#">HOME</a>
+	<a class="nav-link" href="index.php">HOME</a>
 	</li>
 	<li class="nav-item p-2">
 	<a class="nav-link" href="consult.php">CONSULT</a>
@@ -28,10 +67,13 @@
 	<a class="nav-link" href="#blog-head-section">BLOG</a>
 	</li>
 	<li class="nav-item p-2">
-	<a class="nav-link" href="#as-head-section">ABOUT US</a>
+	<a class="nav-link" href="About.php">ABOUT US</a>
 	</li>
 	<li class="nav-item p-2">
-	<a class="nav-link" href="#as-head-section">LOGIN</a>
+	<a class="nav-link" href="Login.php">LOGIN</a>
+	</li>
+	<li class="nav-item p-2">
+	<input class="btn btn-outline-success" type="button" name="btn" value="<?php echo $_SESSION["uname"]?>">
 	</li>
 	</ul>
 </div>
@@ -44,7 +86,7 @@
 <br/>
 <br/>
 <br/>
-<br/><br/>
+<br/>
 	<div class="home-inner">
 		<div class="container">
 			<div class="row">
@@ -79,23 +121,23 @@
 			<div class="card-block">
 			<h3>Sign Up Today</h3>
 			<p>Please fill out this form to register</p>
-			<form action="mydb.php" method="POST">
+			<form action="" method="POST">
 <div class="form-group">
-					<input type="text" name="username" class="form-control form-control-lg" placeholder="Name">
+					<input type="text" name="username" class="form-control form-control-lg" placeholder="Name" required="required">
 				</div>
 				<div class="form-group">
-					<input type="email" name="email" class="form-control form-control-lg" placeholder="Email">
+					<input type="email" name="email" class="form-control form-control-lg" placeholder="Email" required="required">
 				</div>
 				<div class="form-group">
-					<input type="date" name="dob" class="form-control form-control-lg" placeholder="Age">
+					<input type="text" name="dob" class="form-control form-control-lg" placeholder="Age" required="required">
 				</div>
 				<div class="form-group">
-					<input type="password" name="password" class="form-control form-control-lg" placeholder="Password">
+					<input type="password" name="password" class="form-control form-control-lg" placeholder="Password" required="required">
 				</div>
 				<div class="form-group">
-					<input type="password" name="password2" class="form-control form-control-lg" placeholder="Confirm Password">
+					<input type="password" name="cnfmpwd" class="form-control form-control-lg" placeholder="Confirm Password" required="required">
 				</div>
-				<input type="submit" value="Submit" class="btn btn-outline-success btn-block">
+				<input type="submit" value="submit" name="submit" class="btn btn-outline-success btn-block">
 			</form>
 		</div>
 	</div>
@@ -213,19 +255,20 @@
 				</div>
 
 				<div class="card" style="width: 20rem">
-				<img class="card-img-top img-fluid" src="images/card05.jpeg" alt="">
+				<img height="30px" class="card-img-top img-fluid" src="images/card05.jpeg" alt="">
 				<div class="card-block">
 					<h4 class="card-title text-muted">Papayas Benefits</h4>
 					<h5 class="card-text text-muted">Dont' be deterred by the exquisite look of the Papaya fruit. According to studies and research. Papayas could provide protection against a number of different body conditions like heath diseases. The fibers found in <small> Papayas fruits could also help....</small></h5>
-					<a class="btn btn-outline-warning btn-lg" href="#">Know more</a>
+					<a class="btn btn-outline-warning btn-lg" href="#">Know more</a><p class="card-text"><br/><small class="text-muted">Last updated 2days ago</small></p>
 				</div>
 				</div>
 
-				<div class="card" style="width: 26rem; height: 28rem">
+				<div class="card" style="width: 26rem; height: 30rem">
 				<iframe style="width: 100%; height: 75%" src="https://www.youtube.com/embed/IODxDxX7oi4"></iframe>
 				<div class="card-block">
 					<h4 class="card-title text-muted">Push Up</h4>
 					<h5 class="card-text text-muted">Proper way to do push ups</h5>
+					<p class="card-text" style="margin-top: -25px;"><br/><small class="text-muted">Last updated today</small></p>
 				</div>
 				</div>
 
@@ -246,7 +289,7 @@
 </section>
 
 <!-- footer -->
-<section id="footer" class="text-inverse py-5">
+<section id="footer" class="text-inverse py-3">
 	<div class="container">
 	<div class="d-flex flex-row align-items-center justify-content-between">
 				<h1 class="display-6">Follow Us</h1>

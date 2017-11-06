@@ -1,21 +1,9 @@
 body{
 	min-height: 1000px;
-	background: #65ce81;
+	background: #544f4f;
 }
 .navbar{
 	border-bottom: #008ed6 3px solid;
-}
-
-.navbar-brand{
-	width: 100px;
-	height: 50px;
-	background: #43f736;
-	text-align: center;
-	padding-top: 10px;
-	border-radius-top-left:5px;
-	border-radius-bottom-right:5px; 
-    font-family: fantasy;
-
 }
 
 #main-header

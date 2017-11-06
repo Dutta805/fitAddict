@@ -1,3 +1,38 @@
+<?php
+session_start();
+
+$con = mysql_connect("localhost","root","root123");
+mysql_query("USE user");
+
+if(isset($_POST['submit']))
+{
+	$Lname=$Lemail=$Lpwd='';
+	$Lname=$_POST['username'];
+	$Lemail=$_POST['uemail'];
+	$Lpwd=$_POST['userpwd'];
+	$stat="success";
+
+	$q="SELECT * FROM fitusers";
+	$r=mysql_query($q,$con);
+	while ($a=mysql_fetch_array($r)) {
+		if($a['Name']==$_POST[username] || $a['Email']==$_POST[uemail])
+		{
+			if($a['Password']==$_POST[userpwd])
+			{
+				$_SESSION["uname"]=$a['Name'];
+				$_SESSION["status"]=$stat;
+				header("Location: index.php");
+			}
+			else
+			{
+				echo "<script>alert('Invalid username or password, try again');</script>";
+				header("Location: Login.php");
+			}
+		}
+		}
+}
+?>
+
 <html>
 <head>
 <meta charset="UTF-8">
@@ -51,19 +86,20 @@
 			<h3 class="text-inverse display-5">Admin Login</h3>
 			<form action="" method="POST">
 <div class="form-group">
-					<input type="text" name="adminame" class="form-control form-control-lg" placeholder="Username">
+					<input type="text" name="adminame" class="form-control form-control-lg" placeholder="Username" required="required">
 				</div>
 				<p>or</p>
 				<div class="form-group">
-					<input type="text" name="adminame" class="form-control form-control-lg" placeholder="Name">
+					<input type="text" name="adminame" class="form-control form-control-lg" placeholder="Name" required="required">
 				</div>
 
 				<div class="form-group">
-					<input type="password" name="adminpwd" class="form-control form-control-lg" placeholder="Password">
+					<input type="password" name="adminpwd" class="form-control form-control-lg" placeholder="Password" required="required">
 				</div>
 				<br/>
 
-				<input type="submit" value="Login" class="btn btn-outline-danger btn-block">
+				<input type="submit" value="Login" class="btn btn-outline-danger">&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="reset" value="Reset" class="btn btn-outline-danger">
 			</form>
 		</div>
 	</div>
@@ -76,19 +112,20 @@
 			<h3 class="text-invrse display-5">User Login</h3>
 			<form action="" method="POST">
 <div class="form-group">
-					<input type="text" name="username" class="form-control form-control-lg" placeholder="Username">
+					<input type="text" name="username" class="form-control form-control-lg" placeholder="Name">
 				</div>
 				<p>or</p>
 				<div class="form-group">
-					<input type="text" name="uname" class="form-control form-control-lg" placeholder="Name">
+					<input type="text" name="uemail" class="form-control form-control-lg" placeholder="Email">
 				</div>
 
 				<div class="form-group">
-					<input type="password" name="userpwd" class="form-control form-control-lg" placeholder="Password">
+					<input type="password" name="userpwd" class="form-control form-control-lg" placeholder="Password" required="required">
 				</div>
 				<br/>
 
-				<input type="submit" value="Login" class="btn btn-outline-success btn-block">
+				<input type="submit" name="submit" value="Login" class="btn btn-outline-success">&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="reset" value="reset" class="btn btn-outline-success">
 			</form>
 		</div>
 	</div>

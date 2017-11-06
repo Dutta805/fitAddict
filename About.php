@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <html>
 <head>
 <meta charset="UTF-8">
@@ -33,7 +37,9 @@
 	<a class="nav-link" href="About.php">ABOUT US</a>
 	</li>
 	<li class="nav-item p-2">
-	<a class="nav-link" href="#as-head-section">LOGIN</a>
+	<a class="nav-link" href="Login.php">LOGIN</a>
+	</li>
+	<input class="btn btn-outline-success" type="button" name="btn" value="<?php echo $_SESSION["uname"]?>">
 	</li>
 	</ul>
 </div>
