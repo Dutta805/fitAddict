@@ -1,33 +1,90 @@
 <?php
 session_start();
 
-
 $con = mysql_connect("localhost","root","root123");
 mysql_query("USE user");
 $a=("INSERT INTO fitusers (Name, Email, Age, Password) VALUES ('$_POST[username]', '$_POST[email]', '$_POST[dob]', '$_POST[password]')" );
 
+$name=$email=$age=$pwd=$cnfpwd='';
+$reset='';
+$error=$errorN=$errorE=$errorA='';
 
-
-if(isset($_POST['submit']))
+if($_SERVER['REQUEST_METHOD'] == 'POST')
 {
-	$name = $_POST['username'];
-	$email = $_POST['email'];
-	$age = $_POST['dob'];
-	$pwd = $_POST['password'];
-	$cnfpwd = $_POST['cnfmpwd'];
-
-	if($pwd != $cnfpwd)
+	if(empty($_POST['username']) && empty($_POST['email']) && empty($_POST['password']) && empty($_POST['cnfmpwd']))
 	{
+		$error="*required*";
+		$reset="true";
+	}
+	else
+	{
+		$name=valid($_POST['username']);
+		$email=valid($_POST['email']);
+		$age=valid($_POST['dob']);
+		$pwd=valid($_POST['password']);
+		$cnfpwd=valid($_POST['cnfmpwd']);
+
+		if(!preg_match("/^[a-zA-Z ]*$/",$name))
+		{
+			$errorN="only letters and white spaces allowed";
+			$reset="true";
+			if(!filter_var($email, FILTER_VALIDATE_EMAIL))
+			{
+				$errorE="invalid email input";
+				$reset="true";
+			}
+		}
+		elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			$errorE="invalid email input";
+			$reset="true";
+			if (!preg_match("/^[a-zA-Z ]*$/",$name)) {
+				$errorN="only letters and white spaces allowed";
+				$reset="true";
+			}
+		}
+		elseif (!($age>20 && $age<80)) {
+			$errorA="enter age within 0 to 80";
+			$reset="true";
+			if (!preg_match("/^[a-zA-Z ]*$/",$name)) {
+				$errorN="only letters and white spaces allowed";
+				$reset="true";
+			}
+			if(!filter_var($email, FILTER_VALIDATE_EMAIL))
+			{
+				$errorE="invalid email input";
+				$reset="true";
+			}
+		}
+		else
+		{
+        if(isset($_POST['submit']))
+        {
+	    if($pwd != $cnfpwd)
+	    {
 
 		echo "<script>alert('password doesnt match'); </script>";
 		header('Location: index.php');
-	}
-	else{
+	    }
+	    else{
+
 		echo "<script>alert('Congrats! $name you are now a fitAddict'); </script>";
 		mysql_query($a,$con);
-	}
+	    }
+       }      
+    }
+  }
 }
-mysql_close($con);
+
+
+function valid($data) 
+{
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
+}
+       mysql_close($con);
+
 ?>
 
 
@@ -48,6 +105,7 @@ mysql_close($con);
 <style>
 	.error{
 		color: #FF0000;
+		font-size: 14px;
 	}
 </style>
 <script type="text/javascript">
@@ -169,23 +227,30 @@ function bmi()
 			<div class="card-block">
 			<h3>Sign Up Today</h3>
 			<p>Please fill out this form to register</p>
-			<form action="" method="POST">
-<div class="form-group">
-					<input type="text" name="username" class="form-control form-control-lg" placeholder="Name" required="required">
+			<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
+                <div class="form-group">
+					<input type="text" name="username" class="form-control form-control-lg" placeholder="Name">
+					<span class=".error text-danger"><?php echo $error;?></span>
+					<span class=".error text-danger"><?php echo $errorN;?></span>
 				</div>
 				<div class="form-group">
-					<input type="email" name="email" class="form-control form-control-lg" placeholder="Email" required="required">
+					<input type="email" name="email" class="form-control form-control-lg" placeholder="Email">
+					<span class=".error text-danger"><?php echo $error;?></span>
+					<span class=".error text-danger"><?php echo $errorE;?></span>
 				</div>
 				<div class="form-group">
-					<input type="text" name="dob" class="form-control form-control-lg" placeholder="Age" required="required">
+					<input type="text" name="dob" class="form-control form-control-lg" placeholder="Age">
+					<span class=".error text-danger"><?php echo $errorA;?></span>
 				</div>
 				<div class="form-group">
-					<input type="password" name="password" class="form-control form-control-lg" placeholder="Password" required="required">
+					<input type="password" name="password" class="form-control form-control-lg" placeholder="Password" maxlength="10">
+					<span class=".error text-danger"><?php echo $error;?></span>
 				</div>
 				<div class="form-group">
-					<input type="password" name="cnfmpwd" class="form-control form-control-lg" placeholder="Confirm Password" required="required">
+					<input type="password" name="cnfmpwd" class="form-control form-control-lg" placeholder="Confirm Password" maxlength="10">
+					<span class=".error text-danger"><?php echo $error;?></span>
 				</div>
-				<input type="submit" value="submit" name="submit" class="btn btn-outline-success btn-block">
+				<?php if($reset=="true"){echo "<a href='index.php' class='btn btn-outline-warning btn-block'>RESET</a>";} else {echo "<input type='submit' value='SUBMIT' name='submit' class='btn btn-outline-success btn-block'>";} ?>
 			</form>
 		</div>
 	</div>

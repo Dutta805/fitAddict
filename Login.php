@@ -5,18 +5,42 @@ session_start();
 $con = mysql_connect("localhost","root","root123");
 mysql_query("USE user");
 
-if(isset($_POST['submit']))
-{
 	$Lname=$Lemail=$Lpwd='';
-	$Lname=$_POST['username'];
-	$Lemail=$_POST['uemail'];
-	$Lpwd=$_POST['userpwd'];
+	$reset='';
+$error=$errorN=$errorE='';
 
-	$q="SELECT * FROM fitusers";
-	$r=mysql_query($q,$con);
-	while ($a=mysql_fetch_array($r)) {
-		if($a['Name']==$_POST[username] || $a['Email']==$_POST[uemail])
+if($_SERVER['REQUEST_METHOD'] == 'POST')
+{
+	if((empty($_POST['username']) && empty($_POST['userpwd'])) || (empty($_POST['uemail']) && empty($_POST['userpwd'])))
+	{
+		$error="*required*";
+		$reset="true";
+	}
+	else
+	{
+		
+	$Lname = valid($_POST['username']);
+	$Lemail = valid($_POST['uemail']);
+	$Lpwd = valid($_POST['userpwd']);
+
+		if(!preg_match("/^[a-zA-Z ]*$/",$Lname))
 		{
+			$errorN="only letters and white spaces allowed";
+			$reset="true";
+		}
+		elseif (!filter_var($uemail, FILTER_VALIDATE_EMAIL)) {
+			$errorE="invalid email input";
+			$reset="true";
+		}
+		else
+		{
+        if(isset($_POST['submit']))
+        {
+	       $q="SELECT * FROM fitusers";
+	       $r=mysql_query($q,$con);
+	       while ($a=mysql_fetch_array($r)) {
+		   if($a['Name']==$_POST[username] || $a['Email']==$_POST[uemail])
+		   {
 			if($a['Password']==$_POST[userpwd])
 			{
 				$_SESSION["uname"]=$a['Name'];
@@ -27,8 +51,20 @@ if(isset($_POST['submit']))
 				echo "<script>alert('Invalid username or password, try again');</script>";
 				header("Location: Login.php");
 			}
-		}
-		}
+		   }
+		  }
+        }
+   }
+  }
+}
+
+
+function valid($data) 
+{
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+    return $data;
 }
 ?>
 
@@ -87,18 +123,17 @@ if(isset($_POST['submit']))
 <div class="form-group">
 					<input type="text" name="adminame" class="form-control form-control-lg" placeholder="Username" required="required">
 				</div>
-				<p>or</p>
+				<p class="display-6 text-primary">OR</p>
 				<div class="form-group">
 					<input type="text" name="adminame" class="form-control form-control-lg" placeholder="Name" required="required">
 				</div>
 
 				<div class="form-group">
-					<input type="password" name="adminpwd" class="form-control form-control-lg" placeholder="Password" required="required">
+					<input type="password" name="adminpwd" class="form-control form-control-lg" placeholder="Password" maxlength="10" required="required">
 				</div>
 				<br/>
 
-				<input type="submit" value="Login" class="btn btn-outline-danger">&nbsp;&nbsp;&nbsp;&nbsp;
-				<input type="reset" value="Reset" class="btn btn-outline-danger">
+				<input type="submit" value="Login" class="btn btn-block btn-outline-danger">
 			</form>
 		</div>
 	</div>
@@ -109,22 +144,26 @@ if(isset($_POST['submit']))
 			<div id="card2" class="card card-form text-center p-4">
 			<div class="card-block">
 			<h3 class="text-invrse display-5">User Login</h3>
-			<form action="" method="POST">
+			<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
 <div class="form-group">
 					<input type="text" name="username" class="form-control form-control-lg" placeholder="Name">
+					<span class=".error text-danger"><?php echo $error;?></span>
+					<span class=".error text-danger"><?php echo $errorN;?></span>
 				</div>
-				<p>or</p>
+				<p class="display-6 text-primary">OR</p>
 				<div class="form-group">
 					<input type="text" name="uemail" class="form-control form-control-lg" placeholder="Email">
+					<span class=".error text-danger"><?php echo $error;?></span>
+					<span class=".error text-danger"><?php echo $errorE;?></span>
 				</div>
 
 				<div class="form-group">
-					<input type="password" name="userpwd" class="form-control form-control-lg" placeholder="Password" required="required">
+					<input type="password" name="userpwd" class="form-control form-control-lg" placeholder="Password">
+					<span class=".error text-danger"><?php echo $error;?></span>
 				</div>
 				<br/>
 
-				<input type="submit" name="submit" value="Login" class="btn btn-outline-success">&nbsp;&nbsp;&nbsp;&nbsp;
-				<input type="reset" value="reset" class="btn btn-outline-success">
+				<?php if($reset=="true"){echo "<a href='Login.php' class='btn btn-outline-warning btn-block'>RESET</a>";} else {echo "<input type='submit' value='SUBMIT' name='submit' class='btn btn-outline-success btn-block'>";} ?>
 			</form>
 		</div>
 	</div>
