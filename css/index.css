@@ -34,6 +34,10 @@ min-height: 700px;
     font-size: 20px;
 }
 
+.modal{
+    color: black;
+}
+
 #card-section{
     background: #2c4977;
 }

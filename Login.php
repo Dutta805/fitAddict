@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 $con = mysql_connect("localhost","root","root123");
@@ -10,7 +11,6 @@ if(isset($_POST['submit']))
 	$Lname=$_POST['username'];
 	$Lemail=$_POST['uemail'];
 	$Lpwd=$_POST['userpwd'];
-	$stat="success";
 
 	$q="SELECT * FROM fitusers";
 	$r=mysql_query($q,$con);
@@ -20,8 +20,7 @@ if(isset($_POST['submit']))
 			if($a['Password']==$_POST[userpwd])
 			{
 				$_SESSION["uname"]=$a['Name'];
-				$_SESSION["status"]=$stat;
-				header("Location: index.php");
+				header("Location: consult.php");
 			}
 			else
 			{
@@ -59,7 +58,7 @@ if(isset($_POST['submit']))
 	<a class="nav-link" href="index.php">HOME</a>
 	</li>
 	<li class="nav-item p-2">
-	<a class="nav-link" href="consult.php">CONSULT</a>
+	<?php if(!empty($_SESSION["uname"])){echo "<a class='nav-link' href='consult.php'>CONSULT</a>";} else {echo "<a class='nav-link' href='Login.php'>CONSULT</a>";} ?>
 	</li>
 	<li class="nav-item p-2">
 	<a class="nav-link" href="#blog-head-section">BLOG</a>

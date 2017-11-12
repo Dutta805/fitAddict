@@ -1,5 +1,7 @@
 <?php
 session_start();
+
+
 ?>
 
 <html>
@@ -24,7 +26,7 @@ session_start();
 <a href="#" class="navbar-brand text-muted"><img height="60px" width="60px" src="images/fitAddict.png" alt=""></a>
 	<ul class="navbar-nav ml-auto">
 	<li class="nav-item p-2">
-	<a class="nav-link" href="index.php">HOME</a>
+	<?php if(!empty($_SESSION["uname"])){echo "<a class='nav-link' href='index.php' style='display: none;'>HOME</a>";} else {echo "<a class='nav-link' href='index.php'>HOME</a>";} ?>
 	</li>
 	<li class="nav-item p-2 active">
 	<a class="nav-link" href="consult.php">CONSULT</a>
@@ -33,12 +35,13 @@ session_start();
 	<a class="nav-link" href="#blog-head-section">BLOG</a>
 	</li>
 	<li class="nav-item p-2">
-	<a class="nav-link" href="About.php">ABOUT US</a>
+	<a id="About" class="nav-link" href="About.php">ABOUT US</a>
 	</li>
 	<li class="nav-item p-2">
-	<a class="nav-link" href="Login.php">LOGIN</a>
+	<?php if(!empty($_SESSION["uname"])){echo "<a id='logout' class='nav-link' href='logout.php'>LOGOUT</a>";} else {echo "<a class='nav-link' href='Login.php'>LOGIN</a>";} ?>
 	</li>
-	<input class="btn btn-outline-success" type="button" name="btn" value="<?php echo $_SESSION["uname"]?>">
+	<li class="nav-item p-2">
+	<input  style="cursor: pointer;" class="btn btn-outline-success" type="button" name="btn" value="<?php echo $_SESSION["uname"]?>">
 	</li>
 	</ul>
 </div>
@@ -280,9 +283,13 @@ session_start();
 <script src="https://code.jquery-3.2.1.min.js" ></script>
 
 <script>
+    $('#About').click(function(){
+		<?php if(!empty($_SESSION["uname"])){ header("Location: About.php");} else { header("Location: consult.php");} ?>
+	});
+
 	$('.port-item').click(function(){
 		$('.collapse').collapse('hide');
-	})
+	});
 </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.js"></script>

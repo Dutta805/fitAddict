@@ -6,6 +6,8 @@ $con = mysql_connect("localhost","root","root123");
 mysql_query("USE user");
 $a=("INSERT INTO fitusers (Name, Email, Age, Password) VALUES ('$_POST[username]', '$_POST[email]', '$_POST[dob]', '$_POST[password]')" );
 
+
+
 if(isset($_POST['submit']))
 {
 	$name = $_POST['username'];
@@ -48,6 +50,50 @@ mysql_close($con);
 		color: #FF0000;
 	}
 </style>
+<script type="text/javascript">
+function bmi()
+{
+	var kg = document.getElementById("Kg").value;
+	var foot = document.getElementById("foot").value;
+	foot = foot * 0.3048;
+	var inch = document.getElementById("inch").value;
+	inch = inch * 0.0254;
+	var meter = foot + inch;
+	var meter = meter * meter;
+	var result = (kg / meter).toFixed(2);
+
+	if (result<18.5) {
+		document.getElementById("result").style.color="#0000CD";
+		document.getElementById("comment").style.color="#0000CD";
+		document.getElementById("result").innerHTML=result;
+		document.getElementById("comment").innerHTML="Ooh No! You are underweight";
+	}
+	else if(result>=18.5 && result<=24.9)
+	{
+		document.getElementById("result").style.color="#00FF00";
+		document.getElementById("comment").style.color="#00FF00";
+		document.getElementById("result").innerHTML=result;
+		document.getElementById("comment").innerHTML="Congrats! You are healthy";
+	}
+	else if(result>=25 && result<=29.9)
+	{
+		document.getElementById("result").style.color="#FFD700";
+		document.getElementById("comment").style.color="#FFD700";
+		document.getElementById("result").innerHTML=result;
+		document.getElementById("comment").innerHTML="Ooh No! You are overweight";
+	}
+	else if(result>=30)
+	{
+		document.getElementById("result").style.color="#FF0000";
+		document.getElementById("comment").style.color="#FF0000";
+		document.getElementById("result").innerHTML=result;
+		document.getElementById("comment").innerHTML="Sorry but You are obese!";
+	}
+	else{
+		document.getElementById("result").innerHTML=result;
+	}
+}
+</script>
 </head>
 <body>
 <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
@@ -58,22 +104,24 @@ mysql_close($con);
 <a href="#" class="navbar-brand text-muted"><img height="60px" width="50px" src="images/fitAddict.png" alt=""></a>
 	<ul class="navbar-nav ml-auto">
 	<li class="nav-item p-2 active">
-	<a class="nav-link" href="index.php">HOME</a>
+	<a id="home" class="nav-link" href="index.php">HOME</a>
 	</li>
 	<li class="nav-item p-2">
-	<a class="nav-link" href="consult.php">CONSULT</a>
+	<a class='nav-link' href='index.php'>CONSULT</a>
 	</li>
 	<li class="nav-item p-2">
 	<a class="nav-link" href="#blog-head-section">BLOG</a>
 	</li>
 	<li class="nav-item p-2">
-	<a class="nav-link" href="About.php">ABOUT US</a>
+	  <a class="nav-link" href="About.php">ABOUT US</a>
 	</li>
 	<li class="nav-item p-2">
-	<a class="nav-link" href="Login.php">LOGIN</a>
+	   <?php if(!empty($_SESSION["uname"])){echo "<a id='logout' class='nav-link' href='Login.php'>LOGOUT</a>";} else {echo "<a class='nav-link' href='Login.php'>LOGIN</a>";} ?>
 	</li>
+	
+
 	<li class="nav-item p-2">
-	<input class="btn btn-outline-success" type="button" name="btn" value="<?php echo $_SESSION["uname"]?>">
+	<input class="btn btn-outline-success" type="button" name="btn" value="<?php if(!empty($_SESSION["uname"])) {echo $_SESSION["uname"];} else {echo "Profile";} ?>">
 	</li>
 	</ul>
 </div>
@@ -166,7 +214,7 @@ mysql_close($con);
 				<div class="card-block text-muted">
 					<h4 class="card-title">Check Your BMI</h4>
 					<h5 class="card-text">The BMI is an attampt to quantify the amount of tissue mass in an individual, and then categorize that person as <i>underweight, normal weight, overweight, or obese</i> based on that value</h5>
-					<a class="btn btn-success btn-lg btn-block" href="#">BMI</a>
+					<button class="btn btn-block btn-primary" data-toggle="modal" data-target="#myModal">Check BMI</button>
 				</div>
 				</div>
 
@@ -196,6 +244,37 @@ mysql_close($con);
 				</div>
 			</div>
 		</div>
+
+		<div class="modal" id="myModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header bg-success">
+						<h6 class="modal-title display-5" id="myModalLabel">BMI Calculator</h6>
+						<button class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+					<div class="form-inline">
+						Weight(in kilograms):<input class="form-control ml-3" type="text" name="Kg" id="Kg">
+					</div><br/>
+					<div class="form-inline">
+						Height:<input class="form-control ml-3" type="text" name="foot" id="foot" placeholder="foot">
+	                    &nbsp; . &nbsp;<input class="form-control" type="text" name="inch" id="inch" placeholder="inch" style="margin-left: 65px;">
+						
+					</div><br/>
+					<div class="form-inline">
+						Result: <span class="form-control ml-3 display-4" id="result"></span>
+					</div><br/>
+					<div class="form-inline">
+						<span id="comment" style="margin-left: 60px; font-size: 18px;"></span>
+					</div>
+					</div>
+					<div class="modal-footer bg-success">
+						<button class="btn btn-primary" onClick="bmi()">Results</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
 	</div>
 </section>
 
